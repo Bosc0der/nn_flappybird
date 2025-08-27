@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Simple one-layer neural network for vector input, with sigmoid hidden layer and sigmoid output (binary)
 class NN:
     def __init__(self, n_neurons):
-        n_inputs=5
+        n_inputs=4
         # W: (n_inputs, n_neurons)
         # Use uniform distribution instead of normal
         self.W = np.random.uniform(-0.5, 0.5, size=(n_inputs, n_neurons))

@@ -20,6 +20,7 @@ class Population:
             bird.x=0
             bird.y = np.random.uniform(-10, 10)
 
+
     def mutate_all(self): 
         for bird in self.birds:
             bird.mutate()
@@ -40,10 +41,20 @@ class Population:
             new_bird.mutate()
             self.birds.append(new_bird)
 
-        #
-     
-                
-
+    def draw(self, ax):
+        """
+        Draw the trajectories of all birds in the population on the given matplotlib axis.
+        """
+        for bird in self.birds:
+            traj = np.array(bird.trajectory)
+            if len(traj) > 1:
+                ax.plot(traj[:, 0], traj[:, 1], alpha=0.7)
+            
+                # Call the find_ostacle method to update the bird's knowledge of the obstacle position
+    
+    def pop_find_obstacle(self,x_obs,y_obs):
+        for bird in self.birds:
+            bird.find_ostacle(bird.xobs, bird.yobs)
     
 
         
