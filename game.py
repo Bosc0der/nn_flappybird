@@ -19,6 +19,9 @@ class Game:
         
         # Simulate until all birds are dead
         while any(bird.alive for bird in self.population.birds):
+            plt.close()
+            self.plot_trajectories_and_obstacle()
+   
             self.population.pop_find_obstacle(self.obstacle.y_obs,self.obstacle.x_obs)
             self.population.update_all()
             self.collide_all()
@@ -28,14 +31,18 @@ class Game:
                 print('pass')
                 for bird in self.population.birds:
                     bird.x = 0
+                    self.obstacle.y_obs=np.random.uniform(-7, 7)
+                    self.population.pop_find_obstacle(self.obstacle.y_obs,self.obstacle.x_obs)
+                
                 # Set obstacle y_obs to a new random value within allowed bounds
                 #self.obstacle.y_obs = np.random.uniform(Y_LIM_BOTOOM, Y_LIM_TOP - self.obstacle.y_width)
+            
 
     def new_generation(self):
         # Find the last living bird (the one that survived the longest)
         last_living_bird = max(self.population.birds, key=lambda b: len(b.trajectory))
         self.population.next_generation_from_bird(last_living_bird)
-        self.population.restart()
+       
         
 
     def plot_trajectories_and_obstacle(self):
@@ -53,7 +60,9 @@ class Game:
         ax.set_ylabel("y")
         ax.set_title("Birds' Trajectories and Obstacle")
         plt.tight_layout()
-        plt.show()
+        plt.pause(0.01) 
+        
+      
 
     def collide_all(self):
         for bird in self.population.birds:

@@ -2,7 +2,7 @@
 import numpy as np
 # Define time parameters outside the class
 T_START = 0
-T_END = 3
+T_END = 10
 N_POINTS = 250
 TIMESTEP = (T_END - T_START) / N_POINTS
 T_ARRAY = np.linspace(T_START, T_END, N_POINTS)
