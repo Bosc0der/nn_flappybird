@@ -14,7 +14,7 @@ class Bird:
         
         # Set initial conditions randomly
         self.x = 0
-        self.y = np.random.uniform(-10, 10)
+        self.y = 0*np.random.uniform(-10, 10)
         self.vy = 0
         self.r = [self.x, self.y, self.vy]
         self.nn = NN(100)
@@ -48,15 +48,17 @@ class Bird:
         self.trajectory.append([self.x, self.y])
 
     def mutate(self):
+        mutation_rate=1
         # Use the mean of the current bird's weights as the mean for mutation
         mean_W = np.mean(self.nn.W)
         mean_b = np.mean(self.nn.b)
         mean_W_out = np.mean(self.nn.W_out)
         mean_b_out = np.mean(self.nn.b_out)
-        self.nn.W = np.random.normal(loc=mean_W, scale=0.001, size=self.nn.W.shape)
-        self.nn.b = np.random.normal(loc=mean_b, scale=0.001, size=self.nn.b.shape)
-        self.nn.W_out = np.random.normal(loc=mean_W_out, scale=0.001, size=self.nn.W_out.shape)
-        self.nn.b_out = np.random.normal(loc=mean_b_out, scale=0.001, size=())
+
+        self.nn.W = np.random.normal(loc=mean_W, scale=mutation_rate, size=self.nn.W.shape)
+        self.nn.b = np.random.normal(loc=mean_b, scale=mutation_rate, size=self.nn.b.shape)
+        self.nn.W_out = np.random.normal(loc=mean_W_out, scale=mutation_rate, size=self.nn.W_out.shape)
+        self.nn.b_out = np.random.normal(loc=mean_b_out, scale=mutation_rate, size=())
 
     def find_ostacle(self,x_obs,y_obs):
         self.xobs=x_obs
