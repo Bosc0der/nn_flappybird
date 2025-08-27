@@ -40,7 +40,8 @@ class Game:
               
     def new_generation(self):
         # All birds are dead, so select the bird that survived the longest (i.e., has the longest trajectory)
-        best_bird = max(self.population.birds[0].trajectory[:,0])
+        # Find the bird with the longest trajectory (i.e., survived the longest)
+        best_bird = max(self.population.birds, key=lambda bird: len(bird.trajectory))
         self.population.next_generation_from_bird(best_bird)
         self.generation=self.generation+1
 
