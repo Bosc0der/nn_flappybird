@@ -26,8 +26,8 @@ class Population:
             # Create a new bird and copy the parent's neural network weights
             new_bird = Bird()
             # Set mutation parameters
-            initial_mutation_rate = 0.01
-            decay=1
+            initial_mutation_rate = 0.08
+            decay=0.9
             mutation_rate=initial_mutation_rate * (decay ** self.generation)
            
             # Deep copy parent's neural network weights to ensure independent mutation

@@ -14,6 +14,7 @@ class Game:
         self.obstacle = Obstacle(3, 1, 0.1, 5)
         self.population = Population(self.n_birds)
         self.max_distance=[]
+        self.generation_to_plot=50
         # --- For persistent plotting to avoid flicker ---
         self.fig, self.ax = plt.subplots(figsize=(8, 6))
         self._plot_initialized = False
@@ -22,7 +23,9 @@ class Game:
         self.find_obstacle()
         # Simulate until all birds are dead
         while any(bird.alive for bird in self.population.birds):
-            self.plot_trajectories_and_obstacle()
+            # Only plot for generation 60
+            if self.population.generation == self.generation_to_plot:
+                self.plot_trajectories_and_obstacle()
             self.population.update_all()
             self.collide_all()
             self.update_obstacle_if_passed()
@@ -50,7 +53,11 @@ class Game:
         self.obstacle.x_obs=3
         #generation counter
         self.population.generation=self.population.generation+1
+
     def plot_trajectories_and_obstacle(self):
+        # Only plot for generation 60
+        if self.population.generation != self.generation_to_plot:
+            return
         # Use persistent figure/axes to avoid flicker
         ax = self.ax
         ax.clear()
@@ -115,4 +122,5 @@ class Game:
                     bird.alive = False
                 # Collision with game boundaries (example: y out of bounds)
                 if bird.y < Y_LIM_BOTOOM or bird.y > Y_LIM_TOP:
+                    bird.alive = False
                     bird.alive = False
