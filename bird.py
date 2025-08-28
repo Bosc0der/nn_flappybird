@@ -17,7 +17,7 @@ class Bird:
         self.y = np.random.uniform(-10, 10)*0
         self.vy = 0
         self.r = [self.x, self.y, self.vy]
-        self.nn = NN(100)
+        self.nn = NN(50)
         self.alive = True
         self.yobs_bird=0
         self.xobs_bird=0

@@ -6,6 +6,7 @@ from bird import Bird
 from population import Population
 from obstacle import Obstacle
 from config import T_ARRAY, Y_LIM_BOTOOM, Y_LIM_TOP, TIMESTEP
+from renderer import Renderer
 
 class Game:
     def __init__(self, n_birds, n_generations):
@@ -14,21 +15,22 @@ class Game:
         self.obstacle = Obstacle(1, 1, 0.1, 5)
         self.population = Population(self.n_birds)
         self.max_distance=[]
-    
+        self.renderer=Renderer(self.population, self.obstacle, self.max_distance)
+
+
     def run_generation(self):
         # Simulate until all birds are dead
         while any(bird.alive for bird in self.population.birds):
-            plt.close()
-            #self.plot_trajectories_and_obstacle()
             self.find_obstacle()
             self.population.update_all()
             self.collide_all()
-            
+            self.new_obstacle_if_passed()
+    
+    def new_obstacle_if_passed(self):
     # If any bird reaches or exceeds the obstacle's x set obstacle x_obs further and y_obs randomly
-            if any(bird.x >= self.obstacle.x_obs+self.obstacle.x_width for bird in self.population.birds):
-                self.obstacle.x_obs=self.obstacle.x_obs+1
-                self.obstacle.y_obs=np.random.uniform(-7, 7)
-                self.find_obstacle()
+        if any(bird.x >= self.obstacle.x_obs+self.obstacle.x_width for bird in self.population.birds):
+            self.obstacle.x_obs=self.obstacle.x_obs+1
+            self.obstacle.y_obs=np.random.uniform(-7, 7)
 
     def find_obstacle(self):   
          for bird in self.population.birds:
@@ -47,28 +49,6 @@ class Game:
         #generation counter
         self.population.generation=self.population.generation+1
 
-    def plot_trajectories_and_obstacle(self):
-        fig, ax = plt.subplots(figsize=(8, 6))
-        self.population.draw(ax)
-        self.obstacle.draw(ax)
-        ax.set_ylim(Y_LIM_BOTOOM, Y_LIM_TOP)
-        ax.set_xlim(0,2)
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_title(f"Generation {self.population.generation}")
-        plt.tight_layout()
-        
-        plt.pause(0.01) 
-        
-    def plot_max_distance(self):
-        fig, ax = plt.subplots(figsize=(8, 6))
-        ax.plot(self.max_distance)
-        ax.set_xlabel("Generation")
-        ax.set_ylabel("Max Distance")
-        ax.set_title("Max Distance per Generation")
-        plt.tight_layout()
-        plt.pause(0.01) 
-        
     def collide_all(self):
         for bird in self.population.birds:
             if bird.alive:
