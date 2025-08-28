@@ -20,12 +20,14 @@ class Population:
         Replace the current population with mutated copies of the given parent bird.
         """
         self.birds = [parent_bird]
+        self.birds[0].x=0
+        self.birds[0].trajectory=[]
         for _ in range(self.n_birds-1):
             # Create a new bird and copy the parent's neural network weights
             new_bird = Bird()
             # Set mutation parameters
-            initial_mutation_rate = 3 
-            decay=0.999
+            initial_mutation_rate = 0.01
+            decay=1
             mutation_rate=initial_mutation_rate * (decay ** self.generation)
            
             # Deep copy parent's neural network weights to ensure independent mutation
