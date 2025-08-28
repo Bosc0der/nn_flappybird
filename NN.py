@@ -7,10 +7,13 @@ class NN:
         n_inputs=4
         # W: (n_inputs, n_neurons)
         # Use uniform distribution instead of normal
-        self.W = np.random.uniform(-1, 1, size=(n_inputs, n_neurons))
-        self.b = np.random.uniform(-1, 1, size=(n_neurons,))
-        self.W_out = np.random.uniform(-1, 1, size=(n_neurons,))
-        self.b_out = np.random.uniform(-1,1)
+        # Xavier initialization for weights
+        limit_W = np.sqrt(6 / (n_inputs + n_neurons))
+        self.W = np.random.uniform(-limit_W, limit_W, size=(n_inputs, n_neurons))
+        self.b = np.zeros((n_neurons,))
+        limit_W_out = np.sqrt(6 / (n_neurons + 1))
+        self.W_out = np.random.uniform(-limit_W_out, limit_W_out, size=(n_neurons,))
+        self.b_out = 0.0
 
     def sigmoid(self, z):
         return 1 / (1 + np.exp(-z))

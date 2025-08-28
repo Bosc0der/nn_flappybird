@@ -11,9 +11,8 @@ class Game:
     def __init__(self, n_birds, n_generations):
         self.n_birds = n_birds
         self.n_generations = n_generations
-        self.obstacle = Obstacle(3, 1, 0.1, 5)
+        self.obstacle = Obstacle(1, 1, 0.1, 5)
         self.population = Population(self.n_birds)
-        self.generation=0
         self.max_distance=[]
     
     def run_generation(self):
@@ -21,17 +20,20 @@ class Game:
         while any(bird.alive for bird in self.population.birds):
             plt.close()
             #self.plot_trajectories_and_obstacle()
-            
-            self.population.pop_find_obstacle(self.obstacle.y_obs,self.obstacle.x_obs)
+            self.find_obstacle()
             self.population.update_all()
             self.collide_all()
             
     # If any bird reaches or exceeds the obstacle's x set obstacle x_obs further and y_obs randomly
             if any(bird.x >= self.obstacle.x_obs+self.obstacle.x_width for bird in self.population.birds):
-                # Reset all birds' x to 0
                 self.obstacle.x_obs=2*self.obstacle.x_obs
                 self.obstacle.y_obs=np.random.uniform(-7, 7)
-                    
+                self.find_obstacle()
+
+    def find_obstacle(self):   
+         for bird in self.population.birds:
+                bird.xobs=abs(self.obstacle.x_obs-bird.x)
+                bird.yobs=self.obstacle.y_obs    
             
     def new_generation(self):
         # All birds are dead, so select the bird that survived the longest (i.e., has the longest trajectory)
@@ -40,21 +42,20 @@ class Game:
         print(best_bird.x)
         self.max_distance.append(best_bird.x)
         self.obstacle.y_obs=np.random.uniform(-7, 7)
-        self.obstacle.x_obs=3
+        self.obstacle.x_obs=1
         self.population.next_generation_from_bird(best_bird)
-        
-        self.generation=self.generation+1
-
+        #generation counter
+        self.population.generation=self.population.generation+1
 
     def plot_trajectories_and_obstacle(self):
         fig, ax = plt.subplots(figsize=(8, 6))
         self.population.draw(ax)
         self.obstacle.draw(ax)
-        
         ax.set_ylim(Y_LIM_BOTOOM, Y_LIM_TOP)
+        ax.set_xlim(0,2)
         ax.set_xlabel("x")
         ax.set_ylabel("y")
-        ax.set_title(f"Generation {self.generation}")
+        ax.set_title(f"Generation {self.population.generation}")
         plt.tight_layout()
         
         plt.pause(0.01) 
@@ -66,7 +67,6 @@ class Game:
         ax.set_ylabel("Max Distance")
         ax.set_title("Max Distance per Generation")
         plt.tight_layout()
-        plt.pause(0.01) 
         
     def collide_all(self):
         for bird in self.population.birds:

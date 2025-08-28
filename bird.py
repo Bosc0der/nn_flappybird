@@ -60,6 +60,3 @@ class Bird:
         self.nn.W_out = np.random.normal(loc=mean_W_out, scale=mutation_rate, size=self.nn.W_out.shape)
         self.nn.b_out = np.random.normal(loc=mean_b_out, scale=mutation_rate, size=())
 
-    def find_ostacle(self,x_obs,y_obs):
-        self.xobs=x_obs
-        self.yobs=y_obs
