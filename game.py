@@ -26,14 +26,14 @@ class Game:
             
     # If any bird reaches or exceeds the obstacle's x set obstacle x_obs further and y_obs randomly
             if any(bird.x >= self.obstacle.x_obs+self.obstacle.x_width for bird in self.population.birds):
-                self.obstacle.x_obs=2*self.obstacle.x_obs
+                self.obstacle.x_obs=self.obstacle.x_obs+1
                 self.obstacle.y_obs=np.random.uniform(-7, 7)
                 self.find_obstacle()
 
     def find_obstacle(self):   
          for bird in self.population.birds:
-                bird.xobs=abs(self.obstacle.x_obs-bird.x)
-                bird.yobs=self.obstacle.y_obs    
+                bird.xobs_bird=abs(self.obstacle.x_obs-bird.x)
+                bird.yobs_bird=self.obstacle.y_obs    
             
     def new_generation(self):
         # All birds are dead, so select the bird that survived the longest (i.e., has the longest trajectory)
@@ -67,6 +67,7 @@ class Game:
         ax.set_ylabel("Max Distance")
         ax.set_title("Max Distance per Generation")
         plt.tight_layout()
+        plt.pause(0.01) 
         
     def collide_all(self):
         for bird in self.population.birds:

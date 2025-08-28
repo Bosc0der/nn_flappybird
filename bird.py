@@ -14,18 +14,18 @@ class Bird:
         
         # Set initial conditions randomly
         self.x = 0
-        self.y = np.random.uniform(-10, 10)
+        self.y = np.random.uniform(-10, 10)*0
         self.vy = 0
         self.r = [self.x, self.y, self.vy]
         self.nn = NN(100)
         self.alive = True
-        self.yobs=0
-        self.xobs=0
+        self.yobs_bird=0
+        self.xobs_bird=0
         # Initialize trajectory with the starting position
         self.trajectory = [[self.x, self.y]]
 
     def control_u_NN(self):
-        X = np.array([[self.x, self.y, self.xobs, self.yobs]])
+        X = np.array([[self.x, self.y, self.xobs_bird, self.yobs_bird]])
         u = self.nn.forward(X)
         return u
 
