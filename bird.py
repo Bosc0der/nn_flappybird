@@ -14,7 +14,7 @@ class Bird:
         
         # Set initial conditions randomly
         self.x = 0
-        self.y = 0*np.random.uniform(-10, 10)
+        self.y = np.random.uniform(-10, 10)
         self.vy = 0
         self.r = [self.x, self.y, self.vy]
         self.nn = NN(100)
