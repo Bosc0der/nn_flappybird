@@ -8,6 +8,7 @@ class Population:
         self.n_birds = n_birds
         self.birds = [Bird() for _ in range(n_birds)] 
         self.generation=0
+        self.mutation_rate=0
          # Store each bird's trajectory
 
     def update_all(self):
@@ -27,14 +28,14 @@ class Population:
             new_bird = Bird()
             # Set mutation parameters
             initial_mutation_rate = 0.08
-            decay=0.9
-            mutation_rate=initial_mutation_rate * (decay ** self.generation)
+            decay=0.96
+            self.mutation_rate=initial_mutation_rate * (decay ** self.generation)
            
             # Deep copy parent's neural network weights to ensure independent mutation
-            new_bird.nn.W = np.copy(parent_bird.nn.W) + np.random.normal(loc=0, scale=mutation_rate, size=parent_bird.nn.W.shape)
-            new_bird.nn.b = np.copy(parent_bird.nn.b) + np.random.normal(loc=0, scale=mutation_rate, size=parent_bird.nn.b.shape)
-            new_bird.nn.W_out = np.copy(parent_bird.nn.W_out) + np.random.normal(loc=0, scale=mutation_rate, size=parent_bird.nn.W_out.shape)
-            new_bird.nn.b_out = np.copy(parent_bird.nn.b_out) + np.random.normal(loc=0, scale=mutation_rate, size=())
+            new_bird.nn.W = np.copy(parent_bird.nn.W) + np.random.normal(loc=0, scale=self.mutation_rate, size=parent_bird.nn.W.shape)
+            new_bird.nn.b = np.copy(parent_bird.nn.b) + np.random.normal(loc=0, scale=self.mutation_rate, size=parent_bird.nn.b.shape)
+            new_bird.nn.W_out = np.copy(parent_bird.nn.W_out) + np.random.normal(loc=0, scale=self.mutation_rate, size=parent_bird.nn.W_out.shape)
+            new_bird.nn.b_out = np.copy(parent_bird.nn.b_out) + np.random.normal(loc=0, scale=self.mutation_rate, size=())
             # Mutate the new bird's neural network
             #new_bird.mutate()
             self.birds.append(new_bird)

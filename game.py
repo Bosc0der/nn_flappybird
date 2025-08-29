@@ -11,20 +11,21 @@ class Game:
     def __init__(self, n_birds, n_generations):
         self.n_birds = n_birds
         self.n_generations = n_generations
-        self.obstacle = Obstacle(3, 1, 0.1, 5)
+        self.obstacle = Obstacle(3, 1, 1, 2)#if obstacle is too thin and timestep to large, bird might teleport to the other side
         self.population = Population(self.n_birds)
         self.max_distance=[]
-        self.generation_to_plot=50
+        self.generations_to_plot = set(range(20, 51))  # Plot generations 20 to 50 inclusive
         # --- For persistent plotting to avoid flicker ---
         self.fig, self.ax = plt.subplots(figsize=(8, 6))
         self._plot_initialized = False
+        
 
     def run_generation(self):
         self.find_obstacle()
         # Simulate until all birds are dead
         while any(bird.alive for bird in self.population.birds):
-            # Only plot for generation 60
-            if self.population.generation == self.generation_to_plot:
+            # Plot only for specified generations
+            if self.population.generation in self.generations_to_plot:
                 self.plot_trajectories_and_obstacle()
             self.population.update_all()
             self.collide_all()
@@ -40,7 +41,7 @@ class Game:
     def find_obstacle(self):   
          for bird in self.population.birds:
                 bird.xobs_bird=abs(self.obstacle.x_obs-bird.x)
-                bird.yobs_bird=self.obstacle.y_obs    
+                bird.yobs_bird=self.obstacle.y_obs   
             
     def new_generation(self):
         # All birds are dead, so select the bird that survived the longest (i.e., has the longest trajectory)
@@ -55,8 +56,8 @@ class Game:
         self.population.generation=self.population.generation+1
 
     def plot_trajectories_and_obstacle(self):
-        # Only plot for generation 60
-        if self.population.generation != self.generation_to_plot:
+        # Plot only for specified generations
+        if self.population.generation not in self.generations_to_plot:
             return
         # Use persistent figure/axes to avoid flicker
         ax = self.ax
